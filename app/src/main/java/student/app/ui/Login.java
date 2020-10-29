@@ -23,6 +23,8 @@ public class Login extends AppCompatActivity {
     FirebaseAuth auth;
     EditText email;
     EditText password;
+    String Label = "UserGroup";
+    Bundle bundle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +32,12 @@ public class Login extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         email = findViewById(R.id.editTextEmail);
         password = findViewById(R.id.edittextPassword);
-
+        bundle = getIntent().getExtras();
+        if(bundle == null){
+            startActivity(new Intent(Login.this, UserGroupActivity.class));
+        }
+        String userGroup = bundle.getString(Label, "");
+        Toast.makeText(this, String.format("You have selected a %s user group", userGroup), Toast.LENGTH_SHORT).show();
     }
 
     public void logIn(View view) {
@@ -55,7 +62,7 @@ public class Login extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 progressDialog.dismiss();
                 if(task.isSuccessful()){
-                    Intent intent = new Intent(Login.this, Dashboard.class);
+                    Intent intent = new Intent(Login.this, StudentDashboard.class);
                     startActivity(intent);
                 }
             }
@@ -71,7 +78,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void signUp(View view) {
-        startActivity(new Intent(Login.this, Register.class));
+        startActivity(new Intent(Login.this, StudentRegister.class));
         finish();
     }
 }

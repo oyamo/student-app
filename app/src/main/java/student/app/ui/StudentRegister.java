@@ -19,13 +19,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 
 import student.app.R;
 import student.app.models.Student;
 
-public class Register extends AppCompatActivity {
+public class StudentRegister extends AppCompatActivity {
     EditText studentName;
     EditText studentEmail;
     EditText hostel;
@@ -61,7 +60,7 @@ public class Register extends AppCompatActivity {
 
 
     public void logIn(View view) {
-        startActivity(new Intent(Register.this, Login.class));
+        startActivity(new Intent(StudentRegister.this, Login.class));
         finish();
     }
 
@@ -120,15 +119,15 @@ public class Register extends AppCompatActivity {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         dialog.dismiss();
-                                        Toast.makeText(Register.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(StudentRegister.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                 })
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         dialog.dismiss();
-                                        Toast.makeText(Register.this, "Success", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(Register.this, Dashboard.class));
+                                        Toast.makeText(StudentRegister.this, "Success", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(StudentRegister.this, StudentDashboard.class));
                                     }
                                 });
                     }
@@ -137,7 +136,7 @@ public class Register extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         dialog.dismiss();
-                        Toast.makeText(Register.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(StudentRegister.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

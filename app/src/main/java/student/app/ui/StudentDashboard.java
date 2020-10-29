@@ -1,7 +1,6 @@
 package student.app.ui;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.text.HtmlCompat;
@@ -13,7 +12,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +29,7 @@ import student.app.Splash;
 import student.app.livedata.StudentData;
 import student.app.models.Student;
 
-public class Dashboard extends AppCompatActivity {
+public class StudentDashboard extends AppCompatActivity {
     private StudentData studentData;
     FirebaseAuth auth;
     FirebaseFirestore db;
@@ -95,7 +93,7 @@ public class Dashboard extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(Dashboard.this, "Failed to fetch data", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(StudentDashboard.this, "Failed to fetch data", Toast.LENGTH_SHORT).show();
                         }
                     });
         }
@@ -103,14 +101,14 @@ public class Dashboard extends AppCompatActivity {
 
     public void logOut(View view) {
 
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(Dashboard.this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(StudentDashboard.this);
         alertDialog.setTitle("Log out");
         alertDialog.setMessage("Are sure you want to log out?");
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 auth.signOut();
-                startActivity(new Intent(Dashboard.this, Splash.class));
+                startActivity(new Intent(StudentDashboard.this, Splash.class));
                 finish();
             }
         });

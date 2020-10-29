@@ -3,15 +3,12 @@ package student.app;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.Objects;
-
-import student.app.ui.Dashboard;
-import student.app.ui.Login;
+import student.app.ui.StudentDashboard;
+import student.app.ui.UserGroupActivity;
 
 public class Splash extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
@@ -27,9 +24,9 @@ public class Splash extends AppCompatActivity {
                 try {
                     Thread.sleep(2500);
                     if(firebaseAuth.getCurrentUser() == null){
-                        startActivity(new Intent(Splash.this, Login.class));
+                        startActivity(new Intent(Splash.this, UserGroupActivity.class));
                     }else{
-                        startActivity(new Intent(Splash.this, Dashboard.class));
+                        startActivity(new Intent(Splash.this, StudentDashboard.class));
                     }
                     finish();
                 }catch (Exception e){

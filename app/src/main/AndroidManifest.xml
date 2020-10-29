@@ -13,9 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="q">
-        <activity android:name=".ui.Dashboard"></activity>
+        <activity android:name=".ui.DormStaffRegister"></activity>
         <activity
-            android:name=".ui.Register"
+            android:name=".ui.UserGroupActivity"
+            android:configChanges="uiMode" />
+        <activity android:name=".ui.StudentDashboard" />
+        <activity
+            android:name=".ui.StudentRegister"
             android:configChanges="uiMode" />
         <activity
             android:name=".ui.Login"

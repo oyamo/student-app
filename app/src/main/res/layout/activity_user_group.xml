@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:padding="30dp"
+    android:layout_height="match_parent"
+    tools:context=".ui.UserGroupActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="5dp"
+        android:layout_margin="30dp"
+        app:cardElevation="8dp"
+        app:contentPadding="20dp"
+        android:background="#455555"
+        app:cardBackgroundColor="#455555"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:minWidth="350dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="Select a user group"
+                android:textColor="#fff"
+                android:id="@+id/cardTitle"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:layout_below="@id/cardTitle"
+                android:layout_width="match_parent"
+                android:text="Student"
+                android:paddingTop="10dp"
+                android:onClick="selectStudent"
+                android:layout_margin="10dp"
+                android:paddingBottom="10dp"
+                android:id="@+id/studentUsergroup"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:layout_below="@id/studentUsergroup"
+                android:layout_width="match_parent"
+                android:text="Teacher"
+                android:paddingTop="10dp"
+                android:layout_margin="10dp"
+                android:paddingBottom="10dp"
+                android:onClick="selectTeacher"
+                android:id="@+id/teacherUserGrp"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:layout_below="@id/teacherUserGrp"
+                android:layout_width="match_parent"
+                android:text="Dorm staff"
+                android:paddingTop="10dp"
+                android:layout_margin="10dp"
+                android:paddingBottom="10dp"
+                android:id="@+id/dormUserGrp"
+                android:onClick="selectDormUG"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:layout_below="@id/dormUserGrp"
+                android:layout_width="match_parent"
+                android:text="Cafeteria staff"
+                android:paddingTop="10dp"
+                android:layout_margin="10dp"
+                android:paddingBottom="10dp"
+                android:onClick="selectCafeteria"
+                android:id="@+id/cafeteria"
+                android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
