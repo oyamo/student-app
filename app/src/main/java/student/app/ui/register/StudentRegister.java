@@ -1,4 +1,4 @@
-package student.app.ui;
+package student.app.ui.register;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -23,6 +23,8 @@ import java.util.HashMap;
 
 import student.app.R;
 import student.app.models.Student;
+import student.app.ui.Login;
+import student.app.ui.dashboard.Dashboard;
 
 public class StudentRegister extends AppCompatActivity {
     EditText studentName;
@@ -42,9 +44,9 @@ public class StudentRegister extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_student_register);
         studentName = findViewById(R.id.editTextName);
-        studentEmail = findViewById(R.id.editTextEmail);
+        studentEmail = findViewById(R.id.editTextCourse);
         hostel = findViewById(R.id.editTextHostel);
         room = findViewById(R.id.editTextRoom);
         password = findViewById(R.id.edittextPassword);
@@ -127,7 +129,7 @@ public class StudentRegister extends AppCompatActivity {
                                     public void onSuccess(Void aVoid) {
                                         dialog.dismiss();
                                         Toast.makeText(StudentRegister.this, "Success", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(StudentRegister.this, StudentDashboard.class));
+                                        startActivity(new Intent(StudentRegister.this, Dashboard.class));
                                     }
                                 });
                     }

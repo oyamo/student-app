@@ -8,7 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".ui.StudentRegister">
+        tools:context=".ui.register.StudentRegister">
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
@@ -204,10 +204,10 @@
             android:layout_margin="10dp"
             android:text="Email"
             app:layout_constraintTop_toBottomOf="@id/editTextPhone"
-            app:layout_constraintBottom_toTopOf="@+id/editTextEmail"
+            app:layout_constraintBottom_toTopOf="@+id/editTextCourse"
             app:layout_constraintStart_toStartOf="parent" />
         <EditText
-            android:id="@+id/editTextEmail"
+            android:id="@+id/editTextCourse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -229,7 +229,7 @@
             android:textSize="18sp"
             android:layout_margin="10dp"
             android:text="Password"
-            app:layout_constraintTop_toBottomOf="@id/editTextEmail"
+            app:layout_constraintTop_toBottomOf="@id/editTextCourse"
             app:layout_constraintBottom_toTopOf="@+id/edittextPassword"
             app:layout_constraintStart_toStartOf="parent" />
 

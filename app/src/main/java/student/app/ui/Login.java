@@ -13,11 +13,19 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import student.app.R;
+import student.app.ui.dashboard.Dashboard;
+import student.app.ui.register.StaffRegister;
+import student.app.ui.register.StudentRegister;
 
 public class Login extends AppCompatActivity {
     FirebaseAuth auth;
@@ -25,18 +33,24 @@ public class Login extends AppCompatActivity {
     EditText password;
     String Label = "UserGroup";
     Bundle bundle;
+    String userGroup;
+    FirebaseFirestore mStore;
+    FirebaseAuth mAuth;
+    DocumentReference documentReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         auth = FirebaseAuth.getInstance();
-        email = findViewById(R.id.editTextEmail);
+        email = findViewById(R.id.editTextCourse);
         password = findViewById(R.id.edittextPassword);
         bundle = getIntent().getExtras();
         if(bundle == null){
             startActivity(new Intent(Login.this, UserGroupActivity.class));
         }
-        String userGroup = bundle.getString(Label, "");
+        userGroup = bundle.getString(Label, "");
+        mAuth = FirebaseAuth.getInstance();
+        mStore = FirebaseFirestore.getInstance();
         Toast.makeText(this, String.format("You have selected a %s user group", userGroup), Toast.LENGTH_SHORT).show();
     }
 
@@ -56,29 +70,70 @@ public class Login extends AppCompatActivity {
 
         Task<AuthResult> authTask =  auth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString());
         progressDialog.show();
+        progressDialog.setMax(100);
         progressDialog.setCancelable(false);
-        authTask.addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
+        authTask.addOnSuccessListener(Login.this, new OnSuccessListener<AuthResult>() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                progressDialog.dismiss();
-                if(task.isSuccessful()){
-                    Intent intent = new Intent(Login.this, StudentDashboard.class);
-                    startActivity(intent);
+            public void onSuccess(AuthResult authResult) {
+                progressDialog.setMessage("Almost, hold on");
+                progressDialog.setProgress(50);
+                progressDialog.setIndeterminate(false);
+                FirebaseUser u = authResult.getUser();
+                if(u!=null){
+                    documentReference = mStore.collection(userGroup).document(u.getUid());
+                    documentReference
+                            .get()
+                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    if(documentSnapshot.getData() != null){
+                                        Toast.makeText(Login.this, documentSnapshot.getData().toString(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(Login.this, "It does", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        progressDialog.setMessage("We swear we did our best, but you cant get in, you have no permissions. Tap outside to close");
+                                        progressDialog.setProgress(100);
+                                        progressDialog.setCancelable(true);
+                                        mAuth.signOut();
+                                    }
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    progressDialog.setMessage("We swear we did our best, you can't get in. Tap outside to close");
+                                    progressDialog.setProgress(100);
+                                    progressDialog.setCancelable(true);
+                                }
+                            });
+                }else{
+                    progressDialog.setMessage("We swear we did our best, but the login failed. Tap outside to close");
+                    progressDialog.setProgress(100);
+                    progressDialog.setMax(100);
+                    progressDialog.setCancelable(true);
                 }
+
             }
         });
 
         authTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-
+                progressDialog.setMessage("We swear we did our best, but the login failed. Tap outside to close");
+                progressDialog.setProgress(100);
+                progressDialog.setMax(100);
+                progressDialog.setCancelable(true);
                 Toast.makeText(Login.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     public void signUp(View view) {
-        startActivity(new Intent(Login.this, StudentRegister.class));
+        Intent intent = new Intent(Login.this, StudentRegister.class);
+        if(!userGroup.equalsIgnoreCase("Students")){
+            intent =  new Intent(Login.this, StaffRegister.class);
+            intent.putExtra(Label, userGroup);
+        }
+        startActivity(intent);
         finish();
     }
 }

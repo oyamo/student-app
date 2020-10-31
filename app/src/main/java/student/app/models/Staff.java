@@ -4,6 +4,15 @@ public class Staff {
     int staffID;
     String staffName;
     String hostel;
+    String staffType;
+
+    public String getStaffType() {
+        return staffType;
+    }
+
+    public void setStaffType(String staffType) {
+        this.staffType = staffType;
+    }
 
     public int getStaffID() {
         return staffID;

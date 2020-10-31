@@ -1,4 +1,4 @@
-package student.app.ui;
+package student.app.ui.dashboard;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -29,7 +29,7 @@ import student.app.Splash;
 import student.app.livedata.StudentData;
 import student.app.models.Student;
 
-public class StudentDashboard extends AppCompatActivity {
+public class Dashboard extends AppCompatActivity {
     private StudentData studentData;
     FirebaseAuth auth;
     FirebaseFirestore db;
@@ -93,7 +93,7 @@ public class StudentDashboard extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(StudentDashboard.this, "Failed to fetch data", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Dashboard.this, "Failed to fetch data", Toast.LENGTH_SHORT).show();
                         }
                     });
         }
@@ -101,14 +101,14 @@ public class StudentDashboard extends AppCompatActivity {
 
     public void logOut(View view) {
 
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(StudentDashboard.this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(Dashboard.this);
         alertDialog.setTitle("Log out");
         alertDialog.setMessage("Are sure you want to log out?");
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 auth.signOut();
-                startActivity(new Intent(StudentDashboard.this, Splash.class));
+                startActivity(new Intent(Dashboard.this, Splash.class));
                 finish();
             }
         });
