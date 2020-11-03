@@ -49,7 +49,6 @@ import student.app.util.NFCBroadcastReceiver;
 
 public class Home extends AppCompatActivity implements
         TabLayout.OnTabSelectedListener,
-        WifiP2pManager.ChannelListener,
         WifiP2pManager.ConnectionInfoListener,
         WifiP2pManager.PeerListListener {
     private StudentData studentData;
@@ -308,13 +307,6 @@ public class Home extends AppCompatActivity implements
     }
 
 
-    @Override
-    public void onChannelDisconnected() {
-
-    }
-
-
-
     // The interface from the big class
 
 //    @Override
@@ -345,6 +337,7 @@ public class Home extends AppCompatActivity implements
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo info) {
         this.info = info;
+        Toast.makeText(this, "Connection available", Toast.LENGTH_SHORT).show();
     }
 
     /**

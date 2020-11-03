@@ -59,7 +59,9 @@ public class StaffRegister extends AppCompatActivity {
     }
 
     private boolean isEmpty(EditText e) {
-        e.setError("This can't be empty");
+        if(TextUtils.isEmpty(e.getText().toString())){
+            e.setError("This can't be empty");
+        }
         return TextUtils.isEmpty(e.getText().toString());
     }
 

@@ -9,9 +9,12 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +25,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import student.app.R;
+import student.app.models.Attendance;
 import student.app.prefs.AuthPref;
 import student.app.util.NFCBroadcastReceiver;
 
@@ -109,6 +121,7 @@ public class AttendanceFragment extends NFCFragment implements View.OnClickListe
             editText.setHint("Your student ID");
             scan.setText("Scan");
             tv.setText("Confirm Student ID");
+
         }else{
             editText.setHint("Student ID");
             scan.setText("Scan");
@@ -128,8 +141,105 @@ public class AttendanceFragment extends NFCFragment implements View.OnClickListe
     @Override
     public void onClick(View v) {
         int view = v.getId();
-        if (view == R.id.scanBtn){
-            pb.setVisibility(View.VISIBLE);
+        if(pb.getVisibility() != View.VISIBLE){
+            if (view == R.id.scanBtn){
+
+                AuthPref authPref = new AuthPref(getContext());
+                String userGroup = authPref.getUserGroup();
+                final String studentID = editText.getText().toString();
+
+
+                if(TextUtils.isEmpty(studentID)) return;
+                pb.setVisibility(View.VISIBLE);
+                final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                FirebaseUser user = auth.getCurrentUser();
+                DocumentReference reference = firebaseFirestore.collection("Students").document(user.getUid());
+                if(userGroup.equalsIgnoreCase("Students")){
+                    final Attendance attendance = new Attendance();
+                    reference.get()
+                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                         if(documentSnapshot.contains("studentID")){
+                                             String studentId = String.valueOf(documentSnapshot.get("studentID"));
+                                             if(studentID.equalsIgnoreCase(studentId)){
+                                                 int StudentID = Integer.parseInt(studentID);
+                                                attendance.setStudentId(StudentID);
+                                                attendance.setCourseCode(13);
+                                                attendance.setStudentName(String.valueOf(documentSnapshot.get("studentName")));
+                                                attendance.setSecNo(23);
+                                                attendance.setDateTime((int) System.currentTimeMillis());
+                                                DocumentReference attendanceRef  =  firebaseFirestore.collection("Attendance").document(studentID);
+                                                attendanceRef.set(attendance)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        pb.setVisibility(View.GONE);
+                                                        editText.setText("");
+                                                        Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        pb.setVisibility(View.GONE);
+                                                        Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                             }else{
+                                                 pb.setVisibility(View.GONE);
+                                                 Toast.makeText(getContext(), "Error: Invalid StudentID", Toast.LENGTH_SHORT).show();
+                                             }
+                                         }else {
+                                             pb.setVisibility(View.GONE);
+                                             Toast.makeText(getContext(), "Error encountered", Toast.LENGTH_SHORT).show();
+                                         }
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    pb.setVisibility(View.GONE);
+                                    Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }else {
+                    Handler mHandler = new Handler(Looper.getMainLooper());
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(1220);
+                                DocumentReference doc = firebaseFirestore.collection("Attendance").document(studentID);
+                                doc.get()
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                pb.setVisibility(View.GONE);
+                                                Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        })
+                                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                pb.setVisibility(View.GONE);
+                                                if(documentSnapshot.contains("studentId")){
+                                                    String studentName = String.valueOf(documentSnapshot.get("studentName"));
+                                                    editText.setText("");
+                                                    Toast.makeText(getContext(), studentName + " successfully verified", Toast.LENGTH_SHORT).show();
+                                                }else{
+                                                    Toast.makeText(getContext(), "Verification failed", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
         }
     }
 

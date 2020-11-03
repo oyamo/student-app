@@ -1,6 +1,6 @@
 package student.app.models;
 
-class Attendance {
+public class Attendance {
     int studentId;
     String studentName;
     int courseCode;

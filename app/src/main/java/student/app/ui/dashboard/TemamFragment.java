@@ -5,17 +5,32 @@ import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import student.app.R;
+import student.app.models.Canteen;
+import student.app.models.Hostel;
 import student.app.prefs.AuthPref;
 
 import static android.net.wifi.p2p.WifiP2pManager.*;
@@ -25,7 +40,7 @@ import static android.net.wifi.p2p.WifiP2pManager.*;
  * Use the {@link TemamFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TemamFragment extends Fragment {
+public class TemamFragment extends Fragment implements View.OnClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -42,6 +57,7 @@ public class TemamFragment extends Fragment {
     IntentFilter intentFilter;
     Channel channel;
     WifiP2pManager manager;
+    ProgressBar pb;
     public TemamFragment() {
         // Required empty public constructor
     }
@@ -82,28 +98,8 @@ public class TemamFragment extends Fragment {
         editText = v.findViewById(R.id.studentIDInput);
         tv = v.findViewById(R.id.studentIdLabel);
         na = v.findViewById(R.id.notAllowed);
-
-        intentFilter = new IntentFilter();
-        // Indicates a change in the wifi P2p status
-        intentFilter.addAction(WIFI_P2P_STATE_CHANGED_ACTION);
-
-        // Indicates change in the list of available peers
-        intentFilter.addAction(WIFI_P2P_PEERS_CHANGED_ACTION);
-
-        // Indicates the state of Wifi p2p connectivity has changed
-        intentFilter.addAction(WIFI_P2P_CONNECTION_CHANGED_ACTION);
-
-        // Indicates this device's de tails have changed
-        intentFilter.addAction(WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
-
-        // Assign to the manager
-        manager = (WifiP2pManager) getContext().getSystemService(Context.WIFI_P2P_SERVICE);
-
-        if(manager != null){
-            channel = manager.initialize(getContext(), Looper.getMainLooper(), null);
-        }
-
-
+        pb = v.findViewById(R.id.progress);
+        scan.setOnClickListener(this);
         AuthPref authPref = new AuthPref(this.getContext());
         String userGroup = authPref.getUserGroup();
         if(userGroup.equalsIgnoreCase("Dorms")){
@@ -126,15 +122,106 @@ public class TemamFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onClick(View v) {
+        int view = v.getId();
+        if(pb.getVisibility() != View.VISIBLE){
+            if (view == R.id.scanBtn){
+
+                AuthPref authPref = new AuthPref(getContext());
+                String userGroup = authPref.getUserGroup();
+                final String studentID = editText.getText().toString();
+
+
+                if(TextUtils.isEmpty(studentID)) return;
+                pb.setVisibility(View.VISIBLE);
+                final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                FirebaseUser user = auth.getCurrentUser();
+                DocumentReference reference = firebaseFirestore.collection("Students").document(user.getUid());
+                if(userGroup.equalsIgnoreCase("Students")){
+                    final Hostel hostel = new Hostel() ;
+                    reference.get()
+                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    if(documentSnapshot.contains("studentID")){
+                                        String studentId = String.valueOf(documentSnapshot.get("studentID"));
+                                        if(studentID.equalsIgnoreCase(studentId)){
+                                            int StudentID = Integer.parseInt(studentID);
+                                            hostel.setHostel(String.valueOf(documentSnapshot.get("hostel")));
+                                            hostel.setStudentID(StudentID);
+                                            hostel.setStudentName(String.valueOf(documentSnapshot.get("studentName")));
+                                            DocumentReference attendanceRef  =  firebaseFirestore.collection("Hostel").document(studentID);
+                                            attendanceRef.set(hostel)
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            pb.setVisibility(View.GONE);
+                                                            Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                                                            editText.setText("");
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            pb.setVisibility(View.GONE);
+                                                            Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                        }else{
+                                            pb.setVisibility(View.GONE);
+                                            Toast.makeText(getContext(), "Error: Invalid StudentID", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }else {
+                                        pb.setVisibility(View.GONE);
+                                        Toast.makeText(getContext(), "Error encountered", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    pb.setVisibility(View.GONE);
+                                    Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }else {
+                    Handler mHandler = new Handler(Looper.getMainLooper());
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(1220);
+                                DocumentReference doc = firebaseFirestore.collection("Hostel").document(studentID);
+                                doc.get()
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                pb.setVisibility(View.GONE);
+                                                Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        })
+                                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                pb.setVisibility(View.GONE);
+                                                if(documentSnapshot.contains("studentId")){
+                                                    String studentName = String.valueOf(documentSnapshot.get("studentName"));
+                                                    editText.setText("");
+                                                    Toast.makeText(getContext(), studentName + " successfully verified", Toast.LENGTH_SHORT).show();
+                                                }else{
+                                                    Toast.makeText(getContext(), "Verification failed", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+        }
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-
 
 }
