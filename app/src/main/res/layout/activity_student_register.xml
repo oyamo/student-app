@@ -204,10 +204,10 @@
             android:layout_margin="10dp"
             android:text="Email"
             app:layout_constraintTop_toBottomOf="@id/editTextPhone"
-            app:layout_constraintBottom_toTopOf="@+id/editTextCourse"
+            app:layout_constraintBottom_toTopOf="@+id/editTextEmail"
             app:layout_constraintStart_toStartOf="parent" />
         <EditText
-            android:id="@+id/editTextCourse"
+            android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -229,7 +229,7 @@
             android:textSize="18sp"
             android:layout_margin="10dp"
             android:text="Password"
-            app:layout_constraintTop_toBottomOf="@id/editTextCourse"
+            app:layout_constraintTop_toBottomOf="@id/editTextEmail"
             app:layout_constraintBottom_toTopOf="@+id/edittextPassword"
             app:layout_constraintStart_toStartOf="parent" />
 
