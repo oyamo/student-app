@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -23,7 +22,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import student.app.R;
-import student.app.ui.dashboard.Dashboard;
+import student.app.prefs.AuthPref;
+import student.app.ui.dashboard.Home;
 import student.app.ui.register.StaffRegister;
 import student.app.ui.register.StudentRegister;
 
@@ -87,8 +87,10 @@ public class Login extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                                     if(documentSnapshot.getData() != null){
-                                        Toast.makeText(Login.this, documentSnapshot.getData().toString(), Toast.LENGTH_SHORT).show();
-                                        Toast.makeText(Login.this, "It does", Toast.LENGTH_SHORT).show();
+                                        AuthPref authPref = new AuthPref(Login.this);
+                                        authPref.setUserGroup(userGroup);
+                                        startActivity(new Intent(Login.this, Home.class));
+                                        finish();
                                     }else{
                                         progressDialog.setMessage("We swear we did our best, but you cant get in, you have no permissions. Tap outside to close");
                                         progressDialog.setProgress(100);

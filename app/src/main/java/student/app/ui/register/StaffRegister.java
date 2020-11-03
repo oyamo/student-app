@@ -21,8 +21,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import student.app.R;
 import student.app.models.Staff;
+import student.app.prefs.AuthPref;
 import student.app.ui.UserGroupActivity;
-import student.app.ui.dashboard.Dashboard;
+import student.app.ui.dashboard.Home;
 
 public class StaffRegister extends AppCompatActivity {
     EditText editTextName,
@@ -95,8 +96,10 @@ public class StaffRegister extends AppCompatActivity {
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            Intent intent = new Intent(StaffRegister.this, Dashboard.class);
+                                            Intent intent = new Intent(StaffRegister.this, Home.class);
                                             intent.putExtra(Label, type);
+                                            AuthPref authPref = new AuthPref(StaffRegister.this);
+                                            authPref.setUserGroup(type);
                                             startActivity(intent);
                                         }
                                     })

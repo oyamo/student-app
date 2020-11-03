@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.dashboard.CanteenFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:padding="30dp"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_marginTop="30dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/studentIdLabel"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:inputType="number"
+            android:layout_marginTop="30dp"
+            android:id="@+id/studentIDInput"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_width="match_parent"
+            android:id="@+id/scanBtn"
+            android:layout_marginTop="30dp"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:textAlignment="center"
+            android:layout_marginTop="40dp"
+            android:visibility="gone"
+            android:id="@+id/notAllowed"
+            android:text="You are unauthorised to view this page."
+            android:layout_height="wrap_content"/>
+        <ProgressBar
+            android:layout_width="30dp"
+            android:id="@+id/progress"
+            android:layout_marginTop="20dp"
+            android:visibility="gone"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="30dp"/>
+    </LinearLayout>
+
+</FrameLayout>

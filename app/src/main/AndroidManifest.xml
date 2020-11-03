@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="student.app">
-
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="true"
@@ -13,11 +16,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="q">
+        <receiver android:name=".util.NFCBroadcastReceiver"/>
+
         <activity android:name=".ui.register.StaffRegister" />
         <activity
             android:name=".ui.UserGroupActivity"
             android:configChanges="uiMode" />
-        <activity android:name=".ui.dashboard.Dashboard" />
+        <activity
+            android:name=".ui.dashboard.Home"
+            android:configChanges="uiMode"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
         <activity
             android:name=".ui.register.StudentRegister"
             android:configChanges="uiMode" />

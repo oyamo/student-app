@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import student.app.ui.dashboard.Dashboard;
+import student.app.ui.dashboard.Home;
 import student.app.ui.UserGroupActivity;
 
 public class Splash extends AppCompatActivity {
@@ -26,7 +26,7 @@ public class Splash extends AppCompatActivity {
                     if(firebaseAuth.getCurrentUser() == null){
                         startActivity(new Intent(Splash.this, UserGroupActivity.class));
                     }else{
-                        startActivity(new Intent(Splash.this, Dashboard.class));
+                        startActivity(new Intent(Splash.this, Home.class));
                     }
                     finish();
                 }catch (Exception e){

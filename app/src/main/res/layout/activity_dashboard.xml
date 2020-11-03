@@ -4,147 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.dashboard.Dashboard">
-
-    <ImageView
-        android:layout_width="70dp"
-        android:layout_centerHorizontal="true"
-        android:layout_height="70dp"
-        android:layout_margin="10dp"
-        android:id="@+id/avatar"
-        android:src="@drawable/img"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:id="@+id/progressText"
-        android:layout_below="@id/avatar"
-        android:textAlignment="center"
-        android:layout_centerHorizontal="true"
-        android:text="Fetching data from firebase.."
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:id="@+id/fullNames"
-        android:layout_below="@id/progressText"
-        android:layout_centerHorizontal="true"
-        android:textAlignment="center"
-        android:layout_marginTop="20dp"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif-condensed"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:id="@+id/courseName"
-        android:textAlignment="center"
-        android:textFontWeight="900"
-        android:fontFamily="serif-monospace"
-        android:layout_marginTop="20dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/fullNames"
-        android:layout_height="wrap_content"/>
-    <androidx.cardview.widget.CardView
+    android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+    tools:context=".ui.dashboard.Home">
+    <com.google.android.material.appbar.MaterialToolbar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/courseName"
-        android:id="@+id/infoCard"
-        android:padding="20dp"
-        android:layout_margin="20dp"
-        app:cardCornerRadius="8dp"
-        android:background="#455555"
-        app:cardBackgroundColor="#455555">
-        <LinearLayout
-            android:orientation="vertical"
+        android:id="@+id/toolBar"
+        android:layout_height="wrap_content">
+        <com.google.android.material.tabs.TabLayout
             android:layout_width="match_parent"
-            android:padding="10dp"
-            android:layout_height="match_parent">
-           <androidx.cardview.widget.CardView
-               android:layout_width="match_parent"
-               app:contentPadding="10dp"
-               app:cardCornerRadius="5dp"
-               android:layout_marginTop="5dp"
-               android:background="#43A047"
-               app:cardBackgroundColor="#43A047"
-               android:layout_height="wrap_content">
-               <TextView
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:textColor="#fff"
-                   android:id="@+id/studentId" />
-           </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                app:contentPadding="10dp"
-                app:cardCornerRadius="5dp"
-                android:layout_marginTop="20dp"
-                android:background="#43A047"
-                app:cardBackgroundColor="#43A047"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:textColor="#fff"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/studentEmail"/>
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                app:contentPadding="10dp"
-                app:cardCornerRadius="5dp"
-                android:layout_marginTop="20dp"
-                android:background="#43A047"
-                app:cardBackgroundColor="#43A047"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/studentHostel"
-                    android:textColor="#fff" />
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                app:contentPadding="10dp"
-                app:cardCornerRadius="5dp"
-                android:layout_marginTop="20dp"
-                android:background="#43A047"
-                app:cardBackgroundColor="#43A047"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/roomNo"
-                    android:textColor="#fff"
-                   />
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+            app:tabRippleColor="#fff"
+            app:tabGravity="center"
+            app:tabIndicatorColor="#fff"
+            app:tabIndicatorHeight="3dp"
+            android:id="@+id/tabLayout"
+            android:layout_height="wrap_content"/>
+    </com.google.android.material.appbar.MaterialToolbar>
+    <androidx.viewpager.widget.ViewPager
+        android:layout_below="@id/toolBar"
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="50dp"
+        android:layout_height="match_parent"/>
     <Button
         android:layout_width="match_parent"
-        android:layout_below="@+id/infoCard"
-        android:layout_marginRight="30dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="20dp"
-        android:id="@+id/cafeteria"
-        android:padding="10dp"
-        android:text="View Cafeteria"
-        android:layout_height="wrap_content"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_below="@+id/cafeteria"
         android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="20dp"
-        android:id="@+id/hostel"
-        android:padding="10dp"
-        android:text="View hostel"
-        android:layout_height="wrap_content"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_below="@+id/hostel"
-        android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="10dp"
+        android:paddingTop="10dp"
+        android:layout_marginTop="-60dp"
+        android:text="LOG OUT"
         android:onClick="logOut"
-        android:padding="10dp"
-        android:text="Log out"
+        android:paddingBottom="10dp"
+        android:layout_below="@id/viewPager"
         android:layout_height="wrap_content"/>
 </RelativeLayout>

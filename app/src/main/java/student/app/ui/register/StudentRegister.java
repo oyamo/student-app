@@ -23,8 +23,9 @@ import java.util.HashMap;
 
 import student.app.R;
 import student.app.models.Student;
+import student.app.prefs.AuthPref;
 import student.app.ui.Login;
-import student.app.ui.dashboard.Dashboard;
+import student.app.ui.dashboard.Home;
 
 public class StudentRegister extends AppCompatActivity {
     EditText studentName;
@@ -129,7 +130,9 @@ public class StudentRegister extends AppCompatActivity {
                                     public void onSuccess(Void aVoid) {
                                         dialog.dismiss();
                                         Toast.makeText(StudentRegister.this, "Success", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(StudentRegister.this, Dashboard.class));
+                                        AuthPref authPref = new AuthPref(StudentRegister.this);
+                                        authPref.setUserGroup("Students");
+                                        startActivity(new Intent(StudentRegister.this, Home.class));
                                     }
                                 });
                     }
