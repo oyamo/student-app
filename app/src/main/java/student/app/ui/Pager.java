@@ -55,6 +55,6 @@ public class Pager extends FragmentStatePagerAdapter {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return (new String[]{"Attendance","Canteen","Temam"})[position];
+        return (new String[]{"Attendance","Canteen","Tamam"})[position];
     }
 }
