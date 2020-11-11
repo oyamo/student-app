@@ -4,6 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -21,7 +25,19 @@ public class StudentAttentActivity extends AppCompatActivity {
     }
 
     public void Attend(View view) {
-        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this, "50");
+        String channelId = "efae";
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    "NFC running",
+                    NotificationManager.IMPORTANCE_HIGH);
+            mNotificationManager.createNotificationChannel(channel);
+        }
+        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this, channelId);
         notifBuilder.setContentTitle("One Touch NFC");
         notifBuilder.setContentText("Student attendance is currently in session. It might take some time.");
         notifBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
@@ -30,7 +46,7 @@ public class StudentAttentActivity extends AppCompatActivity {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
 // notificationId is a unique int for each notification that you must define
-        notificationManager.notify(10, notifBuilder.build());
+        notificationManager.notify(0, notifBuilder.build());
 
         ProgressIndicator indicator = findViewById(R.id.progress);
         TextView textView = findViewById(R.id.buttonText);
