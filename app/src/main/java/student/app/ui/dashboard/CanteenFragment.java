@@ -32,7 +32,7 @@ import student.app.prefs.AuthPref;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link CanteenFragment#newInstance} factory method to
+ * Use the {@link CanteenFragment#newInstance   } factory method to
  * create an instance of this fragment.
  */
 public class CanteenFragment extends Fragment implements View.OnClickListener {

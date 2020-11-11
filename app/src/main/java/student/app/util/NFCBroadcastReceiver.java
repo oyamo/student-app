@@ -34,6 +34,9 @@ public class NFCBroadcastReceiver extends BroadcastReceiver {
         this.home = home;
     }
 
+    public NFCBroadcastReceiver() {
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();

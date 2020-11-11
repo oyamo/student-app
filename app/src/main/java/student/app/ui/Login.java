@@ -89,7 +89,7 @@ public class Login extends AppCompatActivity {
                                     if(documentSnapshot.getData() != null){
                                         AuthPref authPref = new AuthPref(Login.this);
                                         authPref.setUserGroup(userGroup);
-                                        startActivity(new Intent(Login.this, Home.class));
+                                        startActivity(new Intent(Login.this, AgreementActivity.class));
                                         finish();
                                     }else{
                                         progressDialog.setMessage("We swear we did our best, but you cant get in, you have no permissions. Tap outside to close");

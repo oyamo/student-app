@@ -26,7 +26,7 @@ public class UserGroupActivity extends AppCompatActivity {
 
 
     public void selectTeacher(View view) {
-        nextActivity.putExtra(Label, "Teachers");
+        nextActivity.putExtra(Label, "Admin");
         startActivity(nextActivity);
         finish();
     }

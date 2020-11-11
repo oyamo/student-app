@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    tools:context=".ui.AgreementActivity">
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        app:contentPadding="5dp"
+        app:cardCornerRadius="5dp"
+        android:layout_marginBottom="10dp"
+        android:layout_centerVertical="true"
+        android:id="@+id/nfcImage"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="60dp"
+            android:src="@drawable/ic_baseline_nfc_24"
+            android:layout_height="60dp"/>
+    </com.google.android.material.card.MaterialCardView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/descriptionText"
+        android:layout_below="@id/nfcImage"
+        android:textSize="20sp"
+        android:text="@string/agreement_instructions" />
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox"
+        android:layout_below="@id/descriptionText"
+        android:text="I agree"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:text="Register"
+        android:layout_alignParentRight="true"
+        android:onClick="Agree"
+        android:layout_below="@id/descriptionText"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>
