@@ -33,7 +33,7 @@ public class AgreementActivity extends AppCompatActivity {
             if(userGroup.equalsIgnoreCase("Students")){
                 startActivity(new Intent(AgreementActivity.this, StudentAttentActivity.class));
             }else{
-
+                startActivity(new Intent(AgreementActivity.this, AdminDashBoard.class));
             }
             finish();
         }else{

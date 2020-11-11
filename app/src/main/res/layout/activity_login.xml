@@ -87,6 +87,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="20dp"
         android:onClick="signUp"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/loginBtn"
         android:id="@+id/signupBtn"
         android:text="SIGN UP"

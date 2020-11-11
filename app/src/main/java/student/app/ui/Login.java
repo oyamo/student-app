@@ -89,6 +89,7 @@ public class Login extends AppCompatActivity {
                                     if(documentSnapshot.getData() != null){
                                         AuthPref authPref = new AuthPref(Login.this);
                                         authPref.setUserGroup(userGroup);
+                                        progressDialog.dismiss();
                                         startActivity(new Intent(Login.this, AgreementActivity.class));
                                         finish();
                                     }else{
