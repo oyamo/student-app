@@ -5,4 +5,14 @@
     <string name="agreement_instructions">This application uses Near Field Communication network (N.F.C) to communicate with other gadgets. In order to continue using it, you have to consent. If you allow this, click on I agree button.</string>
     <string name="attending">Attending..</string>
     <string name="scanning">Scanning..</string>
+    <string name="starting">Starting service..</string>
+    <string name="listening">Listening..</string>
+    <string name="discovering">Discovering..</string>
+    <string name="retry">Failed. Retry!</string>
+    <string name="attend">Attend</string>
+    <string name="scan">Scan</string>
+    <string name="connecting">Connecting..</string>
+    <string name="sending_info">Sending info..</string>
+    <string name="gone">Client gone! Redo.</string>
+    <string name="waiting">Waiting for info...</string>
 </resources>

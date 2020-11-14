@@ -21,9 +21,10 @@
         android:theme="@style/AppTheme"
         tools:targetApi="q">
         <activity android:name=".ui.AdminDashBoard"></activity>
-        <activity android:name=".ui.StudentAttentActivity" />
+        <activity android:name=".ui.StudentAttendActivity" />
         <activity android:name=".ui.AgreementActivity" />
 
+        <receiver android:name="student.wnetwork.common.WiFiDirectBroadcastReceiver"/>
         <receiver android:name=".util.NFCBroadcastReceiver" />
 
         <activity android:name=".ui.register.StaffRegister" />

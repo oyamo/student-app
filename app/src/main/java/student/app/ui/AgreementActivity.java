@@ -11,9 +11,7 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.firebase.auth.FirebaseAuth;
 
 import student.app.R;
-import student.app.Splash;
 import student.app.prefs.AuthPref;
-import student.app.ui.dashboard.Home;
 
 public class AgreementActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
@@ -31,7 +29,7 @@ public class AgreementActivity extends AppCompatActivity {
             AuthPref authPref = new AuthPref(this);
             String userGroup = authPref.getUserGroup();
             if(userGroup.equalsIgnoreCase("Students")){
-                startActivity(new Intent(AgreementActivity.this, StudentAttentActivity.class));
+                startActivity(new Intent(AgreementActivity.this, StudentAttendActivity.class));
             }else{
                 startActivity(new Intent(AgreementActivity.this, AdminDashBoard.class));
             }

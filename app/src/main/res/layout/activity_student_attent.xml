@@ -4,21 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.StudentAttentActivity">
+    tools:context=".ui.StudentAttendActivity">
     <com.google.android.material.card.MaterialCardView
         android:layout_width="300dp"
         app:cardCornerRadius="100dp"
         android:onClick="Attend"
+        android:layout_margin="5dp"
+        android:id="@+id/scanNow"
+        app:cardBackgroundColor="#43A047"
+        android:visibility="gone"
         android:layout_centerVertical="true"
         app:rippleColor="@color/colorPrimary"
         android:clickable="true"
+        app:cardElevation="6dp"
+        android:outlineAmbientShadowColor="#43A047"
         android:layout_centerHorizontal="true"
         android:layout_height="100dp"
-        android:focusable="true">
+        android:focusable="true"
+        tools:targetApi="p">
         <TextView
             android:layout_width="wrap_content"
-            android:text="Attend"
+            android:text="Scan"
             android:id="@+id/buttonText"
+            android:textColor="#eee"
             android:layout_gravity="center_horizontal|center_vertical"
             android:layout_height="wrap_content"/>
         <com.google.android.material.progressindicator.ProgressIndicator
@@ -27,5 +35,46 @@
             android:visibility="gone"
             android:id="@+id/progress"
             android:layout_height="5dp"/>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="300dp"
+        app:cardCornerRadius="100dp"
+        android:layout_below="@id/scanNow"
+        android:layout_centerVertical="true"
+        app:rippleColor="@color/colorPrimary"
+        android:clickable="true"
+        android:layout_margin="5dp"
+        android:id="@+id/stopWifi"
+        app:cardBackgroundColor="#E53935"
+        android:layout_centerHorizontal="true"
+        android:layout_height="100dp"
+        android:focusable="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="Stop"
+            android:textColor="#eee"
+            android:id="@+id/stop"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_height="wrap_content"/>
+    </com.google.android.material.card.MaterialCardView>
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="300dp"
+        app:cardCornerRadius="100dp"
+        android:layout_margin="5dp"
+        android:layout_below="@id/stopWifi"
+        android:layout_centerVertical="true"
+        app:rippleColor="@color/colorPrimary"
+        app:cardBackgroundColor="#FDD835"
+        android:clickable="true"
+        android:layout_centerHorizontal="true"
+        android:layout_height="100dp"
+        android:focusable="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="Log out"
+            android:id="@+id/logout"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_height="wrap_content"/>
     </com.google.android.material.card.MaterialCardView>
 </RelativeLayout>
