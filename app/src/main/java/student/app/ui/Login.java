@@ -23,9 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import student.app.R;
 import student.app.prefs.AuthPref;
-import student.app.ui.dashboard.Home;
-import student.app.ui.register.StaffRegister;
-import student.app.ui.register.StudentRegister;
+
 
 public class Login extends AppCompatActivity {
     FirebaseAuth auth;
@@ -130,13 +128,4 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    public void signUp(View view) {
-        Intent intent = new Intent(Login.this, StudentRegister.class);
-        if(!userGroup.equalsIgnoreCase("Students")){
-            intent =  new Intent(Login.this, StaffRegister.class);
-            intent.putExtra(Label, userGroup);
-        }
-        startActivity(intent);
-        finish();
-    }
 }

@@ -67,6 +67,7 @@
         android:layout_centerVertical="true"
         app:rippleColor="@color/colorPrimary"
         app:cardBackgroundColor="#FDD835"
+
         android:onClick="Logout"
         android:clickable="true"
         android:layout_centerHorizontal="true"

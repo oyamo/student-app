@@ -2,7 +2,6 @@ package student.app.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -23,7 +22,6 @@ import android.net.wifi.p2p.WifiP2pManager;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,7 +57,7 @@ public class StudentAttendActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student_attent);
+        setContentView(R.layout.activity_student_attend);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if(checkSelfPermission(Manifest.permission.NFC) == PackageManager.PERMISSION_DENIED){
                 requestPermissions(new String[]{Manifest.permission.NFC, Manifest.permission.ACCESS_FINE_LOCATION}, 30);
@@ -244,10 +242,11 @@ public class StudentAttendActivity extends AppCompatActivity  {
     }
 
     public void Logout(View view) {
-        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        final AlertDialog.Builder alert = new AlertDialog.Builder(StudentAttendActivity.this);
         alert.setCancelable(true);
         alert.setTitle("Log out");
         alert.setMessage("Are you sure you want to log out?");
+
         alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

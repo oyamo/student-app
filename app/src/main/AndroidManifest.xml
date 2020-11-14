@@ -25,19 +25,11 @@
         <activity android:name=".ui.AgreementActivity" />
 
         <receiver android:name="student.wnetwork.common.WiFiDirectBroadcastReceiver"/>
-        <receiver android:name=".util.NFCBroadcastReceiver" />
 
-        <activity android:name=".ui.register.StaffRegister" />
         <activity
             android:name=".ui.UserGroupActivity"
             android:configChanges="uiMode" />
-        <activity
-            android:name=".ui.dashboard.Home"
-            android:configChanges="uiMode"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
-        <activity
-            android:name=".ui.register.StudentRegister"
-            android:configChanges="uiMode" />
+
         <activity
             android:name=".ui.Login"
             android:configChanges="uiMode" />

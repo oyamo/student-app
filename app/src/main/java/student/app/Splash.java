@@ -10,7 +10,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import student.app.ui.AgreementActivity;
-import student.app.ui.dashboard.Home;
 import student.app.ui.UserGroupActivity;
 
 public class Splash extends AppCompatActivity {
@@ -19,7 +18,7 @@ public class Splash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_splash);
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         Thread wait = new Thread(new Runnable() {
