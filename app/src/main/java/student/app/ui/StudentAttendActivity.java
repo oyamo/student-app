@@ -35,6 +35,7 @@ import java.util.List;
 
 import student.app.R;
 import student.app.Splash;
+import student.app.prefs.AuthPref;
 import student.wnetwork.client.WroupClient;
 import student.wnetwork.common.WiFiDirectBroadcastReceiver;
 import student.wnetwork.common.WiFiP2PError;
@@ -143,8 +144,20 @@ public class StudentAttendActivity extends AppCompatActivity  {
                         notificationManager.notify(1, notifBuilder.build());
                         Toast.makeText(StudentAttendActivity.this, "Connected to " + serviceDevice.getDeviceName(), Toast.LENGTH_SHORT).show();
 
+
+                        AuthPref authPref = new AuthPref(getApplicationContext());
+                        String name = authPref.getUserName();
+                        String course = authPref.getCourse();
+                        String dorm = authPref.getHostel();
+                        int studentId = authPref.getUserId();
+
+
                         MessageWrapper messageWrapper = new MessageWrapper();
-                        messageWrapper.setMessage("102:Oyamo Brian:MenengaiDorm");
+                        String builder = studentId + ":" +
+                                name + ":" +
+                                dorm + ":" +
+                                course;
+                        messageWrapper.setMessage(builder);
                         messageWrapper.setMessageType(MessageWrapper.MessageType.NORMAL);
                         textView.setText(R.string.sending_info);
                         wroupClient.sendMessageToServer(messageWrapper);
@@ -178,14 +191,7 @@ public class StudentAttendActivity extends AppCompatActivity  {
             @Override
             public void onDataReceived(MessageWrapper messageWrapper) {
                 String message = messageWrapper.getMessage();
-                if(!message.equalsIgnoreCase("Success")){
-
-                }else{
-
-                }
-
-
-                notifBuilder.setContentText("Congrats, you have successfully checked in");
+                notifBuilder.setContentText(message);
                 notificationManager.notify(4, notifBuilder.build());
                 runOnUiThread(new Runnable() {
                     @Override

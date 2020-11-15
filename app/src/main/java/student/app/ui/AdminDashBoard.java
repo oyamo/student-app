@@ -9,6 +9,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -32,8 +33,15 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import student.app.R;
 import student.app.Splash;
+import student.app.prefs.AuthPref;
+import student.httpnetwork.NetActions;
+import student.httpnetwork.Service;
+import student.httpnetwork.models.Status;
 import student.wnetwork.client.WroupClient;
 import student.wnetwork.common.WiFiDirectBroadcastReceiver;
 import student.wnetwork.common.WiFiP2PError;
@@ -190,20 +198,66 @@ public class AdminDashBoard extends AppCompatActivity implements  NfcAdapter.Cre
             @Override
             public void onDataReceived(MessageWrapper message) {
 
-                notifBuilder.setContentText("Information received successfully from a student");
-                notificationManager.notify(1, notifBuilder.build());
-                MessageWrapper messageWrapper = new MessageWrapper();
-                messageWrapper.setMessage("102:Oyamo Brian:MenengaiDorm");
-                messageWrapper.setMessageType(MessageWrapper.MessageType.NORMAL);
+                String msg = message.getMessage();
+                String[] items = msg.split(":");
 
-                wroupService.sendMessageToAllClients(messageWrapper);
-                runOnUiThread(new Runnable() {
+                String studentName = items[1];
+                String studentId = items[0];
+                String dorm = items[2];
+                String course = items[3];
+
+                // Start Progress
+                ProgressDialog progressDialog = new ProgressDialog(getApplicationContext());
+
+                progressDialog.setMessage("Submitting details");
+                progressDialog.setCancelable(false);
+
+
+                // Initialise server submission
+                Service service = new Service();
+                NetActions actions = service.get();
+
+                Call<Status> statusCall;
+                AuthPref authPref = new AuthPref(getApplicationContext());
+                String staffType = authPref.getStaffType();
+                String staffName = authPref.getUserName();
+                int staffId = authPref.getUserId();
+                int studentIdInt = Integer.parseInt(studentId);
+
+                notifBuilder.setContentText("Information received successfully from " +studentName + "of course: " + course + " and hostel " + dorm);
+                notificationManager.notify(1, notifBuilder.build());
+
+                if(staffType.equalsIgnoreCase("TEACHER")) {
+                    statusCall = actions.authAttend(studentIdInt, staffId);
+                } else if(staffType.equalsIgnoreCase("TAMAM")) {
+                    statusCall = actions.authDorm(studentIdInt, staffId);
+                } else{
+                    statusCall = actions.authCanteen(studentIdInt, staffId);
+                }
+
+                progressDialog.show();
+                statusCall.enqueue(new Callback<Status>() {
                     @Override
-                    public void run() {
-                        indicator.setVisibility(View.GONE);
-                        stopBtn.setVisibility(View.VISIBLE);
-                        textView.setText(R.string.scan);
+                    public void onResponse(Call<Status> call, Response<Status> response) {
+                        progressDialog.dismiss();
+                        MessageWrapper messageWrapper = new MessageWrapper();
+                        messageWrapper.setMessage("You have been successfully authorised/checked by " + staffName);
+                        messageWrapper.setMessageType(MessageWrapper.MessageType.NORMAL);
+                        wroupService.sendMessageToAllClients(messageWrapper);
                     }
+
+                    @Override
+                    public void onFailure(Call<Status> call, Throwable t) {
+                        progressDialog.dismiss();
+                        Toast.makeText(AdminDashBoard.this, "Network error. Authentication failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+                runOnUiThread(() -> {
+                    indicator.setVisibility(View.GONE);
+                    stopBtn.setVisibility(View.VISIBLE);
+                    textView.setText(R.string.scan);
                 });
             }
         });
