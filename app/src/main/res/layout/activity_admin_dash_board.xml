@@ -24,7 +24,7 @@
         tools:targetApi="p">
         <TextView
             android:layout_width="wrap_content"
-            android:text="Scan"
+            android:text="Authenticate"
             android:id="@+id/buttonText"
             android:textColor="#eee"
             android:layout_gravity="center_horizontal|center_vertical"
@@ -63,6 +63,7 @@
         android:layout_width="300dp"
         app:cardCornerRadius="100dp"
         android:layout_margin="5dp"
+        android:visibility="gone"
         android:layout_below="@id/stopWifi"
         android:layout_centerVertical="true"
         app:rippleColor="@color/colorPrimary"
