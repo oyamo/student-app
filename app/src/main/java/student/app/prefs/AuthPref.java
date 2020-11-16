@@ -75,4 +75,14 @@ public class AuthPref {
     public boolean isGroupSet() {
         return sharedPreferences.contains(ugLabel);
     }
+
+    public boolean isLoggedIn() {
+        return sharedPreferences.getBoolean("loggedIn", false);
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("loggedIn", loggedIn);
+        editor.apply();
+    }
 }

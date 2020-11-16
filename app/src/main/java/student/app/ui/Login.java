@@ -86,94 +86,70 @@ public class Login extends AppCompatActivity {
 
         String emailAddress = email.getText().toString().trim();
 
-        authTask.addOnSuccessListener(Login.this, new OnSuccessListener<AuthResult>() {
-            @Override
-            public void onSuccess(AuthResult authResult) {
-                progressDialog.setMessage("Almost, hold on");
-                progressDialog.setProgress(50);
-                progressDialog.setIndeterminate(false);
-                FirebaseUser u = authResult.getUser();
-                if (u != null) {
-                    Service service = new Service();
-                    NetActions actions = service.get();
-                    if (userGroup.equalsIgnoreCase("Students")) {
-                        Call<Student> studentCall = actions.getStudent(emailAddress);
-                        studentCall.enqueue(new Callback<Student>() {
-                            @Override
-                            public void onResponse(@NotNull Call<Student> call, @NotNull Response<Student> response) {
-                                Student student = response.body();
 
-                                if (response.isSuccessful() && student != null && student.get_id() != null) {
-                                    AuthPref authPref = new AuthPref(Login.this);
-                                    authPref.setUserGroup(userGroup);
-                                    authPref.setUserId(student.getStudentId());
-                                    authPref.setCourse(student.getCourse());
-                                    authPref.setUserName(student.getStudentName());
-                                    authPref.setHostel(student.getHostelName());
-                                    progressDialog.dismiss();
+        Service service = new Service();
+        NetActions actions = service.get();
+        if (userGroup.equalsIgnoreCase("Students")) {
+            Call<Student> studentCall = actions.getStudent(emailAddress);
+            studentCall.enqueue(new Callback<Student>() {
+                @Override
+                public void onResponse(@NotNull Call<Student> call, @NotNull Response<Student> response) {
+                    Student student = response.body();
 
-                                    startActivity(new Intent(Login.this, AgreementActivity.class));
-                                    finish();
-                                }else {
-                                    email.setError("Are the credentials correct?");
-                                    progressDialog.dismiss();
-                                }
-                            }
+                    if (response.isSuccessful() && student != null && student.get_id() != null && password.getText().toString().equalsIgnoreCase("1234567")) {
+                        AuthPref authPref = new AuthPref(Login.this);
+                        authPref.setUserGroup(userGroup);
+                        authPref.setUserId(student.getStudentId());
+                        authPref.setCourse(student.getCourse());
+                        authPref.setUserName(student.getStudentName());
+                        authPref.setHostel(student.getHostelName());
+                        authPref.setLoggedIn(true);
+                        progressDialog.dismiss();
 
-                            @Override
-                            public void onFailure(@NotNull Call<Student> call, @NotNull Throwable t) {
-                                progressDialog.dismiss();
-                                Toast.makeText(Login.this, "Could not submit credentials", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    } else {
-                        Call<Staff> staffCall = actions.getStaff(emailAddress);
-                        staffCall.enqueue(new Callback<Staff>() {
-                            @Override
-                            public void onResponse(Call<Staff> call, Response<Staff> response) {
-                                Staff staff = response.body();
-                                if(staff != null && response.isSuccessful()){
-                                    AuthPref authPref = new AuthPref(Login.this);
-                                    authPref.setUserGroup(userGroup);
-                                    authPref.setUserId(staff.getStaffId());
-                                    authPref.setUserName(staff.getStaffName());
-                                    authPref.setStaffType(staff.getStaffType());
-                                    progressDialog.dismiss();
-                                    startActivity(new Intent(Login.this, AgreementActivity.class));
-                                    finish();
-                                }else {
-                                    progressDialog.dismiss();
-                                    Toast.makeText(Login.this, "Could not submit credentials", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<Staff> call, Throwable t) {
-                                Toast.makeText(Login.this, "Could not submit credentials", Toast.LENGTH_SHORT).show();
-                                progressDialog.dismiss();
-                            }
-                        });
+                        startActivity(new Intent(Login.this, AgreementActivity.class));
+                        finish();
+                    }else {
+                        email.setError("Are the credentials correct?");
+                        progressDialog.dismiss();
                     }
-                } else {
-                    progressDialog.setMessage("We swear we did our best, but the login failed. Tap outside to close");
-                    progressDialog.setProgress(100);
-                    progressDialog.setMax(100);
-                    progressDialog.setCancelable(true);
                 }
 
-            }
-        });
+                @Override
+                public void onFailure(@NotNull Call<Student> call, @NotNull Throwable t) {
+                    progressDialog.dismiss();
+                    Toast.makeText(Login.this, "Could not submit credentials", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Call<Staff> staffCall = actions.getStaff(emailAddress);
+            staffCall.enqueue(new Callback<Staff>() {
+                @Override
+                public void onResponse(Call<Staff> call, Response<Staff> response) {
+                    Staff staff = response.body();
+                    if(staff != null && response.isSuccessful() && password.getText().toString().equalsIgnoreCase("1234567")){
+                        AuthPref authPref = new AuthPref(Login.this);
+                        authPref.setUserGroup(userGroup);
+                        authPref.setUserId(staff.getStaffId());
+                        authPref.setUserName(staff.getStaffName());
+                        authPref.setStaffType(staff.getStaffType());
+                        authPref.setLoggedIn(true);
+                        progressDialog.dismiss();
+                        startActivity(new Intent(Login.this, AgreementActivity.class));
+                        finish();
+                    }else {
+                        email.setError("Are the credentials correct?");
+                        progressDialog.dismiss();
+                    }
+                }
 
-        authTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                progressDialog.setMessage("We swear we did our best, but the login failed. Tap outside to close");
-                progressDialog.setProgress(100);
-                progressDialog.setMax(100);
-                progressDialog.setCancelable(true);
-                Toast.makeText(Login.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<Staff> call, Throwable t) {
+                    Toast.makeText(Login.this, "Could not submit credentials", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
+                }
+            });
+        }
+
     }
 
 }

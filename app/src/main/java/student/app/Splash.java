@@ -12,24 +12,23 @@ import android.util.Log;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import student.app.prefs.AuthPref;
 import student.app.ui.AgreementActivity;
 import student.app.ui.UserGroupActivity;
 import timber.log.Timber;
 
 public class Splash extends AppCompatActivity {
-    FirebaseAuth auth;
-    FirebaseUser user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
+        AuthPref authPref = new AuthPref(this);
         Thread wait = new Thread(() -> {
             try {
                 Thread.sleep(2500);
                 Timber.d("Starting");
-                if(user == null){
+                if(!authPref.isLoggedIn()){
                     startActivity(new Intent(Splash.this, UserGroupActivity.class));
                 }else{
                     startActivity(new Intent(Splash.this, AgreementActivity.class));

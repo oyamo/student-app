@@ -31,7 +31,9 @@ import com.google.android.material.progressindicator.ProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.lang.invoke.LambdaConversionException;
 import java.util.List;
+import java.util.function.Consumer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -70,7 +72,7 @@ public class AdminDashBoard extends AppCompatActivity implements  NfcAdapter.Cre
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dash_board);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(checkSelfPermission(Manifest.permission.NFC) == PackageManager.PERMISSION_DENIED){
+            if(checkSelfPermission(Manifest.permission.NFC) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
                 requestPermissions(new String[]{Manifest.permission.NFC, Manifest.permission.ACCESS_FINE_LOCATION}, 30);
             }
         }
@@ -194,6 +196,12 @@ public class AdminDashBoard extends AppCompatActivity implements  NfcAdapter.Cre
             }
         });
 
+
+        ProgressDialog progressDialog = new ProgressDialog(getApplicationContext());
+
+        progressDialog.setMessage("Submitting details");
+        progressDialog.setCancelable(false);
+
         wroupService.setDataReceivedListener(new DataReceivedListener() {
             @Override
             public void onDataReceived(MessageWrapper message) {
@@ -207,10 +215,6 @@ public class AdminDashBoard extends AppCompatActivity implements  NfcAdapter.Cre
                 String course = items[3];
 
                 // Start Progress
-                ProgressDialog progressDialog = new ProgressDialog(getApplicationContext());
-
-                progressDialog.setMessage("Submitting details");
-                progressDialog.setCancelable(false);
 
 
                 // Initialise server submission
@@ -224,8 +228,13 @@ public class AdminDashBoard extends AppCompatActivity implements  NfcAdapter.Cre
                 int staffId = authPref.getUserId();
                 int studentIdInt = Integer.parseInt(studentId);
 
-                notifBuilder.setContentText("Information received successfully from " +studentName + "of course: " + course + " and hostel " + dorm);
-                notificationManager.notify(1, notifBuilder.build());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        notifBuilder.setContentText("Information received successfully from " +studentName + "of course: " + course + " and hostel " + dorm);
+                        notificationManager.notify(1, notifBuilder.build());
+                    }
+                });
 
                 if(staffType.equalsIgnoreCase("TEACHER")) {
                     statusCall = actions.authAttend(studentIdInt, staffId);
@@ -235,11 +244,19 @@ public class AdminDashBoard extends AppCompatActivity implements  NfcAdapter.Cre
                     statusCall = actions.authCanteen(studentIdInt, staffId);
                 }
 
-                progressDialog.show();
+               runOnUiThread(new Runnable() {
+                   @Override
+                   public void run() {
+                       Toast.makeText(AdminDashBoard.this, "Submitting information to the server", Toast.LENGTH_SHORT).show();
+                   }
+               });
+
                 statusCall.enqueue(new Callback<Status>() {
                     @Override
                     public void onResponse(Call<Status> call, Response<Status> response) {
-                        progressDialog.dismiss();
+
+                        runOnUiThread(progressDialog::dismiss);
+
                         MessageWrapper messageWrapper = new MessageWrapper();
                         messageWrapper.setMessage("You have been successfully authorised/checked by " + staffName);
                         messageWrapper.setMessageType(MessageWrapper.MessageType.NORMAL);
@@ -248,7 +265,9 @@ public class AdminDashBoard extends AppCompatActivity implements  NfcAdapter.Cre
 
                     @Override
                     public void onFailure(Call<Status> call, Throwable t) {
-                        progressDialog.dismiss();
+
+                        runOnUiThread(progressDialog::dismiss);
+
                         Toast.makeText(AdminDashBoard.this, "Network error. Authentication failed", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -259,7 +278,15 @@ public class AdminDashBoard extends AppCompatActivity implements  NfcAdapter.Cre
                     stopBtn.setVisibility(View.VISIBLE);
                     textView.setText(R.string.scan);
                 });
+
             }
+        });
+        stopBtn.setOnClickListener(v -> {
+            wroupService.disconnect();
+            indicator.setVisibility(View.GONE);
+            stopBtn.setVisibility(View.GONE);
+            textView.setText(R.string.attend);
+
         });
 
     }

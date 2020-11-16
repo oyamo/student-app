@@ -17,6 +17,8 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
     private WiFiP2PInstance wiFiP2PInstance;
 
 
+    public WiFiDirectBroadcastReceiver() {
+    }
 
     public WiFiDirectBroadcastReceiver(WiFiP2PInstance wiFiP2PInstance) {
         this.wiFiP2PInstance = wiFiP2PInstance;
