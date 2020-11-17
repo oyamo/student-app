@@ -60,7 +60,7 @@ public class StudentAttendActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_attend);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(checkSelfPermission(Manifest.permission.NFC) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            if(checkSelfPermission( Manifest.permission.NFC ) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
                 requestPermissions(new String[]{Manifest.permission.NFC, Manifest.permission.ACCESS_FINE_LOCATION}, 30);
             }
         }

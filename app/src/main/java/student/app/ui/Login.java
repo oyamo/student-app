@@ -86,7 +86,6 @@ public class Login extends AppCompatActivity {
 
         String emailAddress = email.getText().toString().trim();
 
-
         Service service = new Service();
         NetActions actions = service.get();
         if (userGroup.equalsIgnoreCase("Students")) {
@@ -95,8 +94,8 @@ public class Login extends AppCompatActivity {
                 @Override
                 public void onResponse(@NotNull Call<Student> call, @NotNull Response<Student> response) {
                     Student student = response.body();
-
-                    if (response.isSuccessful() && student != null && student.get_id() != null && password.getText().toString().equalsIgnoreCase("1234567")) {
+                    Toast.makeText(Login.this, ""+response.headers(), Toast.LENGTH_SHORT).show();
+                    if (response.isSuccessful() && student != null  && password.getText().toString().equalsIgnoreCase("1234567")) {
                         AuthPref authPref = new AuthPref(Login.this);
                         authPref.setUserGroup(userGroup);
                         authPref.setUserId(student.getStudentId());
