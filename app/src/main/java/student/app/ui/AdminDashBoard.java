@@ -19,7 +19,6 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
-import android.nfc.NfcManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -31,10 +30,6 @@ import com.google.android.material.progressindicator.ProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.lang.invoke.LambdaConversionException;
-import java.util.List;
-import java.util.function.Consumer;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,20 +39,16 @@ import student.app.prefs.AuthPref;
 import student.httpnetwork.NetActions;
 import student.httpnetwork.Service;
 import student.httpnetwork.models.Status;
-import student.wnetwork.client.WroupClient;
-import student.wnetwork.common.WiFiDirectBroadcastReceiver;
-import student.wnetwork.common.WiFiP2PError;
-import student.wnetwork.common.WiFiP2PInstance;
-import student.wnetwork.common.WroupDevice;
-import student.wnetwork.common.WroupServiceDevice;
-import student.wnetwork.common.listeners.ClientConnectedListener;
-import student.wnetwork.common.listeners.ClientDisconnectedListener;
-import student.wnetwork.common.listeners.DataReceivedListener;
-import student.wnetwork.common.listeners.ServiceDisconnectedListener;
-import student.wnetwork.common.listeners.ServiceDiscoveredListener;
-import student.wnetwork.common.listeners.ServiceRegisteredListener;
-import student.wnetwork.common.messages.MessageWrapper;
-import student.wnetwork.service.WroupService;
+import student.nfcnetwork.common.WiFiDirectBroadcastReceiver;
+import student.nfcnetwork.common.WiFiP2PError;
+import student.nfcnetwork.common.WiFiP2PInstance;
+import student.nfcnetwork.common.WroupDevice;
+import student.nfcnetwork.common.listeners.ClientConnectedListener;
+import student.nfcnetwork.common.listeners.ClientDisconnectedListener;
+import student.nfcnetwork.common.listeners.DataReceivedListener;
+import student.nfcnetwork.common.listeners.ServiceRegisteredListener;
+import student.nfcnetwork.common.messages.MessageWrapper;
+import student.nfcnetwork.service.NService;
 
 import static java.lang.Thread.sleep;
 
@@ -144,7 +135,7 @@ public class AdminDashBoard extends AppCompatActivity implements  NfcAdapter.Cre
         stopBtn.setVisibility(View.VISIBLE);
         textView.setText(R.string.starting);
 
-        final WroupService wroupService = WroupService.getInstance(getApplicationContext());
+        final NService wroupService = NService.getInstance(getApplicationContext());
 
         runOnUiThread(new Runnable() {
             @Override

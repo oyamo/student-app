@@ -1,7 +1,7 @@
-package student.wnetwork.common.messages;
+package student.nfcnetwork.common.messages;
 
 
-import student.wnetwork.common.WroupDevice;
+import student.nfcnetwork.common.WroupDevice;
 
 public class RegistrationMessageContent {
 

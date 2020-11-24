@@ -1,4 +1,4 @@
-package student.wnetwork.service;
+package student.nfcnetwork.service;
 
 
 import android.content.Context;
@@ -24,19 +24,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import student.wnetwork.common.WiFiP2PError;
-import student.wnetwork.common.WiFiP2PInstance;
-import student.wnetwork.common.WroupDevice;
-import student.wnetwork.common.direct.WiFiDirectUtils;
-import student.wnetwork.common.listeners.ClientConnectedListener;
-import student.wnetwork.common.listeners.ClientDisconnectedListener;
-import student.wnetwork.common.listeners.DataReceivedListener;
-import student.wnetwork.common.listeners.PeerConnectedListener;
-import student.wnetwork.common.listeners.ServiceRegisteredListener;
-import student.wnetwork.common.messages.DisconnectionMessageContent;
-import student.wnetwork.common.messages.MessageWrapper;
-import student.wnetwork.common.messages.RegisteredDevicesMessageContent;
-import student.wnetwork.common.messages.RegistrationMessageContent;
+import student.nfcnetwork.common.WiFiP2PError;
+import student.nfcnetwork.common.WiFiP2PInstance;
+import student.nfcnetwork.common.WroupDevice;
+import student.nfcnetwork.common.direct.NFCUtils;
+import student.nfcnetwork.common.listeners.ClientConnectedListener;
+import student.nfcnetwork.common.listeners.ClientDisconnectedListener;
+import student.nfcnetwork.common.listeners.DataReceivedListener;
+import student.nfcnetwork.common.listeners.PeerConnectedListener;
+import student.nfcnetwork.common.listeners.ServiceRegisteredListener;
+import student.nfcnetwork.common.messages.DisconnectionMessageContent;
+import student.nfcnetwork.common.messages.MessageWrapper;
+import student.nfcnetwork.common.messages.RegisteredDevicesMessageContent;
+import student.nfcnetwork.common.messages.RegistrationMessageContent;
 
 /**
  * Singleton class acting as a "server" device.
@@ -67,10 +67,10 @@ import student.wnetwork.common.messages.RegistrationMessageContent;
  * }
  * </pre>
  */
-public class WroupService implements PeerConnectedListener {
+public class NService implements PeerConnectedListener {
 
 
-    private static final String TAG = WroupService.class.getSimpleName();
+    private static final String TAG = NService.class.getSimpleName();
 
     private static final String SERVICE_TYPE = "_wroup._tcp";
     public static final String SERVICE_PORT_PROPERTY = "SERVICE_PORT";
@@ -79,7 +79,7 @@ public class WroupService implements PeerConnectedListener {
     public static final String SERVICE_NAME_VALUE = "WROUP";
     public static final String SERVICE_GROUP_NAME = "GROUP_NAME";
 
-    private static WroupService instance;
+    private static NService instance;
 
     private DataReceivedListener dataReceivedListener;
     private ClientConnectedListener clientConnectedListener;
@@ -90,7 +90,7 @@ public class WroupService implements PeerConnectedListener {
     private ServerSocket serverSocket;
     private Boolean groupAlreadyCreated = false;
 
-    private WroupService(Context context) {
+    private NService(Context context) {
         wiFiP2PInstance = WiFiP2PInstance.getInstance(context);
         wiFiP2PInstance.setPeerConnectedListener(this);
     }
@@ -102,9 +102,9 @@ public class WroupService implements PeerConnectedListener {
      * @param context The application context.
      * @return The actual <code>WroupService</code> instance.
      */
-    public static WroupService getInstance(Context context) {
+    public static NService getInstance(Context context) {
         if (instance == null) {
-            instance = new WroupService(context);
+            instance = new NService(context);
         }
         return instance;
     }
@@ -210,9 +210,9 @@ public class WroupService implements PeerConnectedListener {
         serverSocket = null;
         clientsConnected.clear();
 
-        WiFiDirectUtils.removeGroup(wiFiP2PInstance);
-        WiFiDirectUtils.clearLocalServices(wiFiP2PInstance);
-        WiFiDirectUtils.stopPeerDiscovering(wiFiP2PInstance);
+        NFCUtils.removeGroup(wiFiP2PInstance);
+        NFCUtils.clearLocalServices(wiFiP2PInstance);
+        NFCUtils.stopPeerDiscovering(wiFiP2PInstance);
     }
 
     /**

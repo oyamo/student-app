@@ -24,7 +24,7 @@
         <activity android:name=".ui.StudentAttendActivity" />
         <activity android:name=".ui.AgreementActivity" />
 
-        <receiver android:name="student.wnetwork.common.WiFiDirectBroadcastReceiver"/>
+        <receiver android:name="student.nfcnetwork.common.WiFiDirectBroadcastReceiver"/>
 
         <activity
             android:name=".ui.UserGroupActivity"

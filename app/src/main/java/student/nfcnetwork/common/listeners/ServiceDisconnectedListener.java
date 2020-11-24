@@ -1,4 +1,4 @@
-package student.wnetwork.common.listeners;
+package student.nfcnetwork.common.listeners;
 
 
 public interface ServiceDisconnectedListener {

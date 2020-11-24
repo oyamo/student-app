@@ -1,4 +1,4 @@
-package student.wnetwork.client;
+package student.nfcnetwork.client;
 
 
 import android.content.Context;
@@ -29,30 +29,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import student.wnetwork.common.WiFiDirectBroadcastReceiver;
-import student.wnetwork.common.WiFiP2PError;
-import student.wnetwork.common.WiFiP2PInstance;
-import student.wnetwork.common.WroupDevice;
-import student.wnetwork.common.WroupServiceDevice;
-import student.wnetwork.common.direct.WiFiDirectUtils;
-import student.wnetwork.common.listeners.ClientConnectedListener;
-import student.wnetwork.common.listeners.ClientDisconnectedListener;
-import student.wnetwork.common.listeners.DataReceivedListener;
-import student.wnetwork.common.listeners.PeerConnectedListener;
-import student.wnetwork.common.listeners.ServiceConnectedListener;
-import student.wnetwork.common.listeners.ServiceDisconnectedListener;
-import student.wnetwork.common.listeners.ServiceDiscoveredListener;
-import student.wnetwork.common.messages.DisconnectionMessageContent;
-import student.wnetwork.common.messages.MessageWrapper;
-import student.wnetwork.common.messages.RegisteredDevicesMessageContent;
-import student.wnetwork.common.messages.RegistrationMessageContent;
-import student.wnetwork.service.WroupService;
+import student.nfcnetwork.common.WiFiDirectBroadcastReceiver;
+import student.nfcnetwork.common.WiFiP2PError;
+import student.nfcnetwork.common.WiFiP2PInstance;
+import student.nfcnetwork.common.WroupDevice;
+import student.nfcnetwork.common.WroupServiceDevice;
+import student.nfcnetwork.common.direct.NFCUtils;
+import student.nfcnetwork.common.listeners.ClientConnectedListener;
+import student.nfcnetwork.common.listeners.ClientDisconnectedListener;
+import student.nfcnetwork.common.listeners.DataReceivedListener;
+import student.nfcnetwork.common.listeners.PeerConnectedListener;
+import student.nfcnetwork.common.listeners.ServiceConnectedListener;
+import student.nfcnetwork.common.listeners.ServiceDisconnectedListener;
+import student.nfcnetwork.common.listeners.ServiceDiscoveredListener;
+import student.nfcnetwork.common.messages.DisconnectionMessageContent;
+import student.nfcnetwork.common.messages.MessageWrapper;
+import student.nfcnetwork.common.messages.RegisteredDevicesMessageContent;
+import student.nfcnetwork.common.messages.RegistrationMessageContent;
+import student.nfcnetwork.service.NService;
 
 /**
  * Singleton class acting as a client device.
  * <p>
  * Wroup Library will allow you to create a "Server" device and multiple "Client" devices. The
- * {@link WroupService} can register a service which could be discover by the multiple client
+ * {@link NService} can register a service which could be discover by the multiple client
  * devices. The client will search the Wroup services registered in the local network and could
  * connect to any ot them.
  * <p>
@@ -84,11 +84,11 @@ import student.wnetwork.service.WroupService;
  * {@link #connectToService(WroupServiceDevice, ServiceConnectedListener)} passing as argument the
  * appropiate {@link WroupServiceDevice} obtained in the <code>discoverServices()</code> call.
  */
-public class WroupClient implements PeerConnectedListener, ServiceDisconnectedListener {
+public class Client implements PeerConnectedListener, ServiceDisconnectedListener {
 
-    private static final String TAG = WroupClient.class.getSimpleName();
+    private static final String TAG = Client.class.getSimpleName();
 
-    private static WroupClient instance;
+    private static Client instance;
 
     private List<WroupServiceDevice> serviceDevices = new ArrayList<>();
 
@@ -107,7 +107,7 @@ public class WroupClient implements PeerConnectedListener, ServiceDisconnectedLi
     private Map<String, WroupDevice> clientsConnected;
     private Boolean isRegistered = false;
 
-    private WroupClient(Context context) {
+    private Client(Context context) {
         wiFiP2PInstance = WiFiP2PInstance.getInstance(context);
         wiFiP2PInstance.setPeerConnectedListener(this);
         wiFiP2PInstance.setServerDisconnectedListener(this);
@@ -120,9 +120,9 @@ public class WroupClient implements PeerConnectedListener, ServiceDisconnectedLi
      * @param context The application context.
      * @return The actual WroupClient instance.
      */
-    public static WroupClient getInstance(Context context) {
+    public static Client getInstance(Context context) {
         if (instance == null && context != null) {
-            instance = new WroupClient(context);
+            instance = new Client(context);
         }
         return instance;
     }
@@ -144,7 +144,7 @@ public class WroupClient implements PeerConnectedListener, ServiceDisconnectedLi
         wiFiP2PInstance.startPeerDiscovering();
 
         setupDnsListeners(wiFiP2PInstance, serviceDiscoveredListener);
-        WiFiDirectUtils.clearServiceRequest(wiFiP2PInstance);
+        NFCUtils.clearServiceRequest(wiFiP2PInstance);
 
         WifiP2pServiceRequest serviceRequest = WifiP2pDnsSdServiceRequest.newInstance();
         wiFiP2PInstance.getWifiP2pManager().addServiceRequest(wiFiP2PInstance.getChannel(), serviceRequest, new WifiP2pManager.ActionListener() {
@@ -393,9 +393,9 @@ public class WroupClient implements PeerConnectedListener, ServiceDisconnectedLi
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                WiFiDirectUtils.clearServiceRequest(wiFiP2PInstance);
-                WiFiDirectUtils.stopPeerDiscovering(wiFiP2PInstance);
-                WiFiDirectUtils.removeGroup(wiFiP2PInstance);
+                NFCUtils.clearServiceRequest(wiFiP2PInstance);
+                NFCUtils.stopPeerDiscovering(wiFiP2PInstance);
+                NFCUtils.removeGroup(wiFiP2PInstance);
 
                 serverSocket = null;
                 isRegistered = false;
@@ -428,8 +428,8 @@ public class WroupClient implements PeerConnectedListener, ServiceDisconnectedLi
             @Override
             public void onDnsSdTxtRecordAvailable(String fullDomainName, Map<String, String> txtRecordMap, WifiP2pDevice device) {
 
-                if (txtRecordMap.containsKey(WroupService.SERVICE_NAME_PROPERTY) && txtRecordMap.get(WroupService.SERVICE_NAME_PROPERTY).equalsIgnoreCase(WroupService.SERVICE_NAME_VALUE)) {
-                    Integer servicePort = Integer.valueOf(txtRecordMap.get(WroupService.SERVICE_PORT_PROPERTY));
+                if (txtRecordMap.containsKey(NService.SERVICE_NAME_PROPERTY) && txtRecordMap.get(NService.SERVICE_NAME_PROPERTY).equalsIgnoreCase(NService.SERVICE_NAME_VALUE)) {
+                    Integer servicePort = Integer.valueOf(txtRecordMap.get(NService.SERVICE_PORT_PROPERTY));
                     WroupServiceDevice serviceDevice = new WroupServiceDevice(device);
                     serviceDevice.setDeviceServerSocketPort(servicePort);
                     serviceDevice.setTxtRecordMap(txtRecordMap);

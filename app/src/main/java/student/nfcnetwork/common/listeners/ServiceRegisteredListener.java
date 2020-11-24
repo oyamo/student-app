@@ -1,7 +1,7 @@
-package student.wnetwork.common.listeners;
+package student.nfcnetwork.common.listeners;
 
 
-import student.wnetwork.common.WiFiP2PError;
+import student.nfcnetwork.common.WiFiP2PError;
 
 public interface ServiceRegisteredListener {
 

@@ -1,9 +1,9 @@
-package student.wnetwork.common.messages;
+package student.nfcnetwork.common.messages;
 
 
 import java.util.List;
 
-import student.wnetwork.common.WroupDevice;
+import student.nfcnetwork.common.WroupDevice;
 
 public class RegisteredDevicesMessageContent {
 

@@ -1,4 +1,4 @@
-package student.wnetwork.common;
+package student.nfcnetwork.common;
 
 
 import android.content.Context;
@@ -6,8 +6,8 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.util.Log;
 
-import student.wnetwork.common.listeners.PeerConnectedListener;
-import student.wnetwork.common.listeners.ServiceDisconnectedListener;
+import student.nfcnetwork.common.listeners.PeerConnectedListener;
+import student.nfcnetwork.common.listeners.ServiceDisconnectedListener;
 
 
 public class WiFiP2PInstance implements WifiP2pManager.ConnectionInfoListener {

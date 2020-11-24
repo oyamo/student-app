@@ -1,4 +1,4 @@
-package student.wnetwork.common;
+package student.nfcnetwork.common;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

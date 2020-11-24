@@ -1,16 +1,16 @@
-package student.wnetwork.common.direct;
+package student.nfcnetwork.common.direct;
 
 
 import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.util.Log;
 
-import student.wnetwork.common.WiFiP2PError;
-import student.wnetwork.common.WiFiP2PInstance;
+import student.nfcnetwork.common.WiFiP2PError;
+import student.nfcnetwork.common.WiFiP2PInstance;
 
-public class WiFiDirectUtils {
+public class NFCUtils {
 
-    private static final String TAG = WiFiDirectUtils.class.getSimpleName();
+    private static final String TAG = NFCUtils.class.getSimpleName();
 
     public static void clearServiceRequest(WiFiP2PInstance wiFiP2PInstance) {
         wiFiP2PInstance.getWifiP2pManager().clearServiceRequests(wiFiP2PInstance.getChannel(), new WifiP2pManager.ActionListener() {

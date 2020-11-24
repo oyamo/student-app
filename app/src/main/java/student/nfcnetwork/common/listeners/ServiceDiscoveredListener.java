@@ -1,10 +1,10 @@
-package student.wnetwork.common.listeners;
+package student.nfcnetwork.common.listeners;
 
 
 import java.util.List;
 
-import student.wnetwork.common.WiFiP2PError;
-import student.wnetwork.common.WroupServiceDevice;
+import student.nfcnetwork.common.WiFiP2PError;
+import student.nfcnetwork.common.WroupServiceDevice;
 
 public interface ServiceDiscoveredListener {
 

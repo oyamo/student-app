@@ -1,7 +1,7 @@
-package student.wnetwork.common.listeners;
+package student.nfcnetwork.common.listeners;
 
 
-import student.wnetwork.common.WroupDevice;
+import student.nfcnetwork.common.WroupDevice;
 
 public interface ClientDisconnectedListener {
 

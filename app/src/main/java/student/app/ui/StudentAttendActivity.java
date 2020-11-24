@@ -36,18 +36,18 @@ import java.util.List;
 import student.app.R;
 import student.app.Splash;
 import student.app.prefs.AuthPref;
-import student.wnetwork.client.WroupClient;
-import student.wnetwork.common.WiFiDirectBroadcastReceiver;
-import student.wnetwork.common.WiFiP2PError;
-import student.wnetwork.common.WiFiP2PInstance;
-import student.wnetwork.common.WroupDevice;
-import student.wnetwork.common.WroupServiceDevice;
-import student.wnetwork.common.listeners.ClientConnectedListener;
-import student.wnetwork.common.listeners.DataReceivedListener;
-import student.wnetwork.common.listeners.ServiceConnectedListener;
-import student.wnetwork.common.listeners.ServiceDisconnectedListener;
-import student.wnetwork.common.listeners.ServiceDiscoveredListener;
-import student.wnetwork.common.messages.MessageWrapper;
+import student.nfcnetwork.client.Client;
+import student.nfcnetwork.common.WiFiDirectBroadcastReceiver;
+import student.nfcnetwork.common.WiFiP2PError;
+import student.nfcnetwork.common.WiFiP2PInstance;
+import student.nfcnetwork.common.WroupDevice;
+import student.nfcnetwork.common.WroupServiceDevice;
+import student.nfcnetwork.common.listeners.ClientConnectedListener;
+import student.nfcnetwork.common.listeners.DataReceivedListener;
+import student.nfcnetwork.common.listeners.ServiceConnectedListener;
+import student.nfcnetwork.common.listeners.ServiceDisconnectedListener;
+import student.nfcnetwork.common.listeners.ServiceDiscoveredListener;
+import student.nfcnetwork.common.messages.MessageWrapper;
 ;
 
 public class StudentAttendActivity extends AppCompatActivity  {
@@ -128,7 +128,7 @@ public class StudentAttendActivity extends AppCompatActivity  {
         indicator.setVisibility(View.VISIBLE);
         textView.setText(R.string.discovering);
         stopBtn.setVisibility(View.VISIBLE);
-        final WroupClient wroupClient = WroupClient.getInstance(getApplicationContext());
+        final Client wroupClient = Client.getInstance(getApplicationContext());
 
 
         wroupClient.discoverServices(15000L, new ServiceDiscoveredListener() {

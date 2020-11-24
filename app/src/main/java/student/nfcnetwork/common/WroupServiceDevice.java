@@ -1,4 +1,4 @@
-package student.wnetwork.common;
+package student.nfcnetwork.common;
 
 
 import android.net.wifi.p2p.WifiP2pDevice;

@@ -1,7 +1,7 @@
-package student.wnetwork.common.listeners;
+package student.nfcnetwork.common.listeners;
 
 
-import student.wnetwork.common.messages.MessageWrapper;
+import student.nfcnetwork.common.messages.MessageWrapper;
 
 public interface DataReceivedListener {
 
